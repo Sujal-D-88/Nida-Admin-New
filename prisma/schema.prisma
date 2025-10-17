@@ -1,0 +1,71 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  name             String
+  email            String    @unique
+  mobile           String?
+  address          String?
+  registrationType String?
+  memberType       String?
+  subCategory      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Payment Details
+  transactionId String?   @unique
+  payuId        String?   @unique
+  paymentAmount Float?
+  paymentStatus String?
+
+  // Profile Fields
+  workshops        String[]
+  hasPaperOrPoster Boolean?  @default(false)
+  isMember         Boolean?  @default(false)
+  memberId         String?   @unique
+}
+
+model SportRegistration {
+  id             String    @id @default(cuid())
+  name           String
+  age            Int
+  mobile         String
+  gender         String
+  email          String?   // Add this line
+  tshirtSize     String
+  memberType     String
+  selectedSports String[]
+  totalPrice     Float
+  photoUrl       String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Payment Details
+  transactionId  String?   @unique
+  payuId         String?   @unique
+  paymentStatus  String?
+  userId         String?   @unique
+}
+
+// Counter for NIDACON Event User IDs (e.g., NIDA101)
+model Counter {
+  id    String @id @default("user_counter")
+  value Int    @default(99)
+}
+
+// NEW: Counter for IDA Member IDs (e.g., IDAMEM-1001)
+model MemberCounter {
+  id    String @id @default("member_counter")
+  value Int    @default(1000)
+}
